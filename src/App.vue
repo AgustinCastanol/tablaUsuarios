@@ -18,26 +18,31 @@
     <button class=" col-start-2 row-start-3" @click="loadTable($event)">Aceptar</button>
   </form>
 
-  <table v-if="tabla.length != 0 " class="table table-auto w-full">
-    <thead>
-      <tr>
-        <th>Afiliado</th>
-        <th>Cuota</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in tabla">
-        <td>{{item.afiliado}}°</td>
-        <td>${{item.cuota}}</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr>
-        <td>Total</td>
-        <td>${{totalSum}}</td>
-      </tr>
-    </tfoot>
-  </table>
+  <div v-if="tabla.length > 0" class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
+    <div class="table-header-group">
+      <div class="table-row">
+        <div class="table-cell border-solid border-r border-neutral-50 text-left">
+          <span>Afiliado</span>
+        </div>
+        <div class="table-cell text-left">
+          <span>Cuota</span>
+        </div>
+      </div>
+
+    </div>
+      <div class="table-row-group">
+        <div class="table-row my-2" v-for="item in tabla">
+          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+            <span>°{{item.afiliado}}</span>
+          </div>
+          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+            <span>${{item.cuota}}</span>
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- add a float download button with tailwind -->
+  <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">Descargar</button>
 </template>
 <script setup>
 import { ref } from 'vue'
@@ -90,6 +95,7 @@ const loadTable = (e) => {
 
   handleRandomsMinMax()
 
+
   // form.value = {
   //   cantidadAfiliados:null,
   //   cuotaMax:null,
@@ -139,8 +145,25 @@ const handleRandomsMinMax = () => {
     sum = total
   }
   totalSum.value = sum
-
-
+}
+const arrayToCsv = () => {
+  let csvContent = "data:text/csv;charset=utf-8,";
+  /*how to conver a array of objects in array */
+  let array = tabla.value.map((item) => {
+    return [item.afiliado, item.cuota]
+  })
+  array.unshift(['Afiliado', 'Cuota'])
+  array.forEach(function (rowArray) {
+    let row = rowArray.join(";");
+    csvContent += row + "\r\n";
+  }); 
+  var encodedUri = encodeURI(csvContent);
+  var link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", "my_data.csv");
+  document.body.appendChild(link); // Required for FF
+  var encodedUri = encodeURI(csvContent);
+  window.open(encodedUri);
 }
 
 </script>
