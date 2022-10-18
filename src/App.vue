@@ -6,9 +6,9 @@
     </div>
     <div class="col-start-2 row-start-1 col-end-4 inline-grid gap-2 grid-cols-2 ">
       <label class="" for="cuotaMax cuotaMin">Cuota:</label>
-      <input class="col-start-2" step=0.01 placeholder="min" type="number" id="cantidadAfiliados"
+      <input class="col-start-2" step=0.01 placeholder="Max" type="number" id="cantidadAfiliados"
         v-model="form['cuotaMax']">
-      <input class="col-start-2" step=0.01 placeholder="max" type="number" id="cantidadAfiliados"
+      <input class="col-start-2" step=0.01 placeholder="Min" type="number" id="cantidadAfiliados"
         v-model="form['cuotaMin']">
     </div>
     <div class="flex items-start flex-col col-start-1 row-start-2">
