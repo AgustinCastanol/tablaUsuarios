@@ -8,8 +8,8 @@
     <label class="" for="cuotaMax cuotaMin">Cuota:</label>
     <!-- <input class="col-start-2" step=0.01 placeholder="min" type="number"  id="cantidadAfiliados" v-model="cuota['cuotaMax']">
     <input class="col-start-2" step=0.01 placeholder="max" type="number" id="cantidadAfiliados" v-model="cuota['cuotaMin']"> -->
-      <p class=" col-start-2 text-left bg-slate-700">Maximo:{{cuota['cuotaMax']}}</p>
-      <p class="col-start-2 text-left bg-slate-700">Minimo:{{cuota['cuotaMin']}}</p>
+      <p class=" min-w-full w-max col-start-2 text-left bg-slate-700">Maximo:{{cuota['cuotaMax']}}</p>
+      <p class=" min-w-full w-max col-start-2 text-left bg-slate-700">Minimo:{{cuota['cuotaMin']}}</p>
   </div>
   <div class="flex items-start flex-col col-start-1 row-start-2">
     <label class="" for="importeTotal">Importe Total:</label>
@@ -18,7 +18,7 @@
   <button class=" col-start-2 row-start-3" @click="loadTable($event)">Aceptar</button>
 </form>
 
-  <table class="table-auto rounded w-full">
+  <table v-if="tabla.length != 0 " class="table-auto rounded w-full">
     <thead>
       <tr>
         <th>Cantidad De Afiliados</th>
