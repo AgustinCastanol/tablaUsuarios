@@ -130,7 +130,7 @@ const handleRandomsMinMax = () => {
     console.log(sum, "sum")
     let acum = Math.round(((total - sum)) * 100) / 100
     if (acum < 1) {
-      tabla.value[tabla.value.length - 1].cuota += acum
+      tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + acum) * 100) / 100 
     } else {
       for (let i = 0; i < afiliado; i++) {
         tabla.value[i].cuota = Math.round((tabla.value[i].cuota + (acum / afiliado)) * 100) / 100 
