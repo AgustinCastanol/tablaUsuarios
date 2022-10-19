@@ -18,7 +18,7 @@
     <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
     <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
-  <div v-if="loading == true"  class="">Cargando afiliado º{{afiliadoCargado}}</div>
+  <div v-if="loading == true"  class="">Cargando afiliados.....</div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
@@ -112,7 +112,6 @@ try {
     loading.value = false;
     return
   }
-  alert('Cargando...')
   
   await handleRandomsMinMaxPromise()
   
