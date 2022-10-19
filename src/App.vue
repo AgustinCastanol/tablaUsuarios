@@ -69,6 +69,7 @@ const loadTable = async (e) => {
 try {
   e.preventDefault()
   loading.value = true;
+  tabla.value =[]
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
     form.value['cuotaMax'] = form.value['importeTotal']
   }
