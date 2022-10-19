@@ -18,6 +18,7 @@
     <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
     <button class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
+  <div v-if="tabla.length <0 && loading" class="lds-dual-ring"></div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
@@ -49,7 +50,6 @@
       </div>
   </div>
   <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">
-    <div v-if="loading" class="lds-dual-ring"></div>
     Descargar
   </button>
 </template>
@@ -166,13 +166,15 @@ const handleRandomsMinMax = () => {
   totalSum.value = sum
 }
 
-const  refreshTable = (e)=>{
+const refreshTable = (e)=>{
   e.preventDefault()
   table.value = []
-  form.value['cantidadAfiliados'] = null
-  form.value['cuotaMax']=null
-  form.value['cuotaMin']=null
-  form.value['importeTotal'] = null
+  form.value = {
+     cantidadAfiliados:null,
+     cuotaMax:null,
+     cuotaMin:null,
+     importeTotal:null
+   }
 }
 
 const arrayToCsv = () => {
