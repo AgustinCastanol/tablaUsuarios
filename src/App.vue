@@ -57,7 +57,7 @@
 import { ref } from 'vue'
 const totalSum = ref(0)
 const afiliadoCargado=ref(0)
-const loading = false
+const loading = ref(false)
 const form = ref({
   cantidadAfiliados: null,
   importeTotal: null,
@@ -69,7 +69,7 @@ const tabla = ref([])
 const loadTable = async (e) => {
 try {
   e.preventDefault()
-  loading = true;
+  loading.value = true;
   tabla.value =[]
   afiliadoCargado.value=0
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
@@ -81,45 +81,47 @@ try {
   for (let key in form.value) {
     if (form.value[key] == null || form.value[key] == undefined) {
       alert('Complete todos los campos')
-      loading = false;
+      loading.value = false;
       return
     }
     if (form.value[key] < 0) {
       alert('No se admiten valores negativos')
-      loading = false;
+      loading.value = false;
       return
     }
     if (key == 'cantidadAfiliados' || key == 'importeTotal') {
       if (form.value[key] % 1 != 0) {
         alert('No se admiten valores decimales')
-        loading = false;
+        loading.value = false;
         return
       }
       if (form.value[key] == 0) {
         alert('No se admiten valores nulos')
-        loading = false;
+        loading.value = false;
         return
       }
     }
     if (form.value[key] > 1000000000) {
       alert('No se admiten valores tan grandes')
-      loading = false;
+      loading.value = false;
       return
     }
   }
   if (form.value['cuotaMax'] < form.value['cuotaMin']) {
     alert('La cuota maxima no puede ser menor a la cuota minima')
-    loading = false;
+    loading.value = false;
     return
   }
   alert('Cargando...')
   
-  await  handleRandomsMinMax()
-  loading = false;
+  setTimeout(() => {
+    handleRandomsMinMax()
+  },10);
+  loading.value = false;
 
 } catch (error) {
   alert('Error al crear la tabla')
-  loading = false;
+  loading.value = false;
     return
 }
 
