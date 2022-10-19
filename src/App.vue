@@ -16,7 +16,7 @@
       <input class="w-full " type="number" id="importeTotal" v-model="form['importeTotal']">
     </div>
     <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
-    <button class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
+    <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
   <div class="">Afiliado Cargado:{{afiliadoCargado}}</div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
@@ -57,7 +57,7 @@
 import { ref } from 'vue'
 const totalSum = ref(0)
 const afiliadoCargado=ref(0)
-const loading = ref(false)
+const loading = false
 const form = ref({
   cantidadAfiliados: null,
   importeTotal: null,
@@ -69,7 +69,7 @@ const tabla = ref([])
 const loadTable = async (e) => {
 try {
   e.preventDefault()
-  loading.value = true;
+  loading = true;
   tabla.value =[]
   afiliadoCargado.value=0
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
@@ -81,47 +81,45 @@ try {
   for (let key in form.value) {
     if (form.value[key] == null || form.value[key] == undefined) {
       alert('Complete todos los campos')
-      loading.value = false;
+      loading = false;
       return
     }
     if (form.value[key] < 0) {
       alert('No se admiten valores negativos')
-      loading.value = false;
+      loading = false;
       return
     }
     if (key == 'cantidadAfiliados' || key == 'importeTotal') {
       if (form.value[key] % 1 != 0) {
         alert('No se admiten valores decimales')
-        loading.value = false;
+        loading = false;
         return
       }
       if (form.value[key] == 0) {
         alert('No se admiten valores nulos')
-        loading.value = false;
+        loading = false;
         return
       }
     }
     if (form.value[key] > 1000000000) {
       alert('No se admiten valores tan grandes')
-      loading.value = false;
+      loading = false;
       return
     }
   }
   if (form.value['cuotaMax'] < form.value['cuotaMin']) {
     alert('La cuota maxima no puede ser menor a la cuota minima')
-    loading.value = false;
+    loading = false;
     return
   }
   alert('Cargando...')
   
-  setTimeout(() => {
-    handleRandomsMinMax()
-  },10);
-  loading.value = false;
+  await  handleRandomsMinMax()
+  loading = false;
 
 } catch (error) {
   alert('Error al crear la tabla')
-  loading.value = false;
+  loading = false;
     return
 }
 
