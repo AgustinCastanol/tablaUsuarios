@@ -168,7 +168,7 @@ const handleRandomsMinMax = () => {
 
 const refreshTable = (e)=>{
   e.preventDefault()
-  table.value = []
+  tabla.value = []
   form.value = {
      cantidadAfiliados:null,
      cuotaMax:null,
