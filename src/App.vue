@@ -68,8 +68,6 @@ const tabla = ref([])
 const loadTable = async (e) => {
 try {
   e.preventDefault()
-  
-  tabla.value=[]
   loading.value = true;
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
     form.value['cuotaMax'] = form.value['importeTotal']
