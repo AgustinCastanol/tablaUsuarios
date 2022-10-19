@@ -114,7 +114,7 @@ try {
   }
   alert('Cargando...')
   
-  handleRandomsMinMax()
+  await handleRandomsMinMaxPromise()
   
   loading.value = false;
 
