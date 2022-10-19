@@ -132,9 +132,6 @@ const handleRandomsMinMax = () => {
   tabla.value = []
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
-    if(random > max){
-      random -= random - max
-    }
     random = Math.round(random * 100) / 100
     if (sum + random <= total) {
       sum += random
