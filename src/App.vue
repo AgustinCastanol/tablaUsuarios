@@ -15,12 +15,14 @@
       <label class="" for="importeTotal">Importe Total:</label>
       <input class="w-full " type="number" id="importeTotal" v-model="form['importeTotal']">
     </div>
-    <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
+    <button :disable="loading" class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
     <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
-  <div v-if="loading == true"  class="">Cargando afiliados.....
+<div v-if="loading">
+  <div  class="">Cargando afiliados.....
   </div>
-  <div v-if="loading" class="lds-dual-ring"></div>
+  <div class="lds-dual-ring"></div>
+</div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
@@ -135,7 +137,6 @@ const handleRandomsMinMax = () => {
   tabla.value = []
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
-    random = Math.round(random * 100) / 100
     afiliadoCargado.value=afiliado+1
     if (sum + random <= total) {
       sum += random
@@ -149,7 +150,7 @@ const handleRandomsMinMax = () => {
       } else {
         tabla.value.push({
           afiliado: afiliado + 1,
-          cuota: random
+          cuota: Math.round(random * 100) / 100
         })
       }
       afiliado++
@@ -157,14 +158,7 @@ const handleRandomsMinMax = () => {
   }
   if (sum < total) {
     console.log(sum, "sum")
-    let acum = Math.round(((total - sum)) * 100) / 100
-    if (acum < 1) {
-      tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + acum) * 100) / 100 
-    } else {
-      for (let i = 0; i < afiliado; i++) {
-        tabla.value[i].cuota = Math.round((tabla.value[i].cuota + (acum / afiliado)) * 100) / 100 
-      }
-    }
+    tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + (total - sum)) * 100) / 100 
     sum = total
   }
   totalSum.value = sum
