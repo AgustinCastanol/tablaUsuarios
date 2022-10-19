@@ -43,7 +43,7 @@
             <span>Total</span>
           </div>
           <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
-            <span>{{totalSum}}</span>
+            <span>${{totalSum}}</span>
           </div>
         </div>
       </div>
@@ -68,6 +68,8 @@ const tabla = ref([])
 const loadTable = async (e) => {
 try {
   e.preventDefault()
+  
+  tabla.value=[]
   loading.value = true;
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
     form.value['cuotaMax'] = form.value['importeTotal']
