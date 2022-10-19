@@ -17,8 +17,7 @@
     </div>
     <button class=" col-start-2 row-start-3" @click="loadTable($event)">Aceptar</button>
   </form>
-
-  <div v-if="tabla.length > 0" class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
+  <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
         <div class="table-cell border-solid border-r border-neutral-50 text-left">
@@ -42,22 +41,28 @@
       </div>
   </div>
   <!-- add a float download button with tailwind -->
-  <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">Descargar</button>
+  <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">
+    <div v-if="loading" class="lds-dual-ring"></div>
+    Descargar
+  </button>
 </template>
 <script setup>
 import { ref } from 'vue'
 const totalSum = ref(0)
+const loading = ref(false)
 const form = ref({
   cantidadAfiliados: null,
   importeTotal: null,
   cuotaMax: null,
   cuotaMin: null,
 })
-const tabla = ref([])
-const loadTable = (e) => {
-  e.preventDefault()
-  console.log(form.value)
 
+const tabla = ref([])
+const loadTable = async (e) => {
+try {
+  e.preventDefault()
+  loading.value = true;
+  alert('Cargando...')
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
     form.value['cuotaMax'] = form.value['importeTotal']
   }
@@ -67,41 +72,49 @@ const loadTable = (e) => {
   for (let key in form.value) {
     if (form.value[key] == null || form.value[key] == undefined) {
       alert('Complete todos los campos')
+      loading.value = false;
       return
     }
     if (form.value[key] < 0) {
       alert('No se admiten valores negativos')
+      loading.value = false;
       return
     }
     if (key == 'cantidadAfiliados' || key == 'importeTotal') {
       if (form.value[key] % 1 != 0) {
         alert('No se admiten valores decimales')
+        loading.value = false;
         return
       }
       if (form.value[key] == 0) {
         alert('No se admiten valores nulos')
+        loading.value = false;
         return
       }
     }
     if (form.value[key] > 1000000000) {
       alert('No se admiten valores tan grandes')
+      loading.value = false;
       return
     }
   }
   if (form.value['cuotaMax'] < form.value['cuotaMin']) {
     alert('La cuota maxima no puede ser menor a la cuota minima')
+    loading.value = false;
     return
   }
 
+ setTimeout(() => {
   handleRandomsMinMax()
+ },1000);
+  loading.value = false;
 
+} catch (error) {
+  alert('Error al crear la tabla')
+  loading.value = false;
+    return
+}
 
-  // form.value = {
-  //   cantidadAfiliados:null,
-  //   cuotaMax:null,
-  //   cuotaMin:null,
-  //   importeTotal:null
-  // }
 }
 const handleRandomsMinMax = () => {
   /*Create a random number within a range, without the sum of the generated values ​​exceeding the total */
@@ -146,6 +159,8 @@ const handleRandomsMinMax = () => {
   }
   totalSum.value = sum
 }
+
+
 const arrayToCsv = () => {
   let csvContent = "data:text/csv;charset=utf-8,";
   /*how to conver a array of objects in array */
