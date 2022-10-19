@@ -15,15 +15,18 @@
       <label class="" for="importeTotal">Importe Total:</label>
       <input class="w-full " type="number" id="importeTotal" v-model="form['importeTotal']">
     </div>
-    <button :disable="loading" class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
-    <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
+    <button :disable="loading" class=" col-start-1 row-start-3" @click="loadTable($event) "
+      :style="loading?'opacity:0.4;':''">Aceptar</button>
+    <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)"
+      :style="loading?'opacity:0.4;':''">Refresh</button>
   </form>
-<div v-if="loading">
-  <div  class="">Cargando afiliados.....
+  <div v-if="loading">
+    <div class="">Cargando afiliados.....
+    </div>
+    <div class="lds-dual-ring"></div>
   </div>
-  <div class="lds-dual-ring"></div>
-</div>
-  <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
+  <div v-if="tabla.length > 0 && !loading "
+    class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
         <div class="table-cell border-solid border-r border-neutral-50 text-left">
@@ -34,24 +37,24 @@
         </div>
       </div>
     </div>
-      <div class="table-row-group">
-        <div class="table-row my-2" v-for="item in tabla">
-          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
-            <span>°{{item.afiliado}}</span>
-          </div>
-          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
-            <span>${{item.cuota}}</span>
-          </div>
+    <div class="table-row-group">
+      <div class="table-row my-2" v-for="item in tabla">
+        <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+          <span>°{{item.afiliado}}</span>
         </div>
-        <div class="table-row my-2">
-          <div class="table-cell border-solid border-t border-r border-neutrak-59 text-left">
-            <span>Total</span>
-          </div>
-          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
-            <span>${{totalSum}}</span>
-          </div>
+        <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+          <span>${{item.cuota}}</span>
         </div>
       </div>
+      <div class="table-row my-2">
+        <div class="table-cell border-solid border-t border-r border-neutrak-59 text-left">
+          <span>Total</span>
+        </div>
+        <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+          <span>${{totalSum}}</span>
+        </div>
+      </div>
+    </div>
   </div>
   <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">
     Descargar
@@ -60,7 +63,7 @@
 <script setup>
 import { ref } from 'vue'
 const totalSum = ref(0)
-const afiliadoCargado=ref(0)
+const afiliadoCargado = ref(0)
 const loading = ref(false)
 const form = ref({
   cantidadAfiliados: null,
@@ -71,61 +74,61 @@ const form = ref({
 
 const tabla = ref([])
 const loadTable = async (e) => {
-try {
-  e.preventDefault()
-  loading.value = true;
-  tabla.value =[]
-  afiliadoCargado.value=0
-  if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
-    form.value['cuotaMax'] = form.value['importeTotal']
-  }
-  if (form.value['cuotaMin'] == null || form.value['cuotaMin'] == 0) {
-    form.value['cuotaMin'] = 0
-  }
-  for (let key in form.value) {
-    if (form.value[key] == null || form.value[key] == undefined) {
-      alert('Complete todos los campos')
-      loading.value = false;
-      return
+  try {
+    e.preventDefault()
+    loading.value = true;
+    tabla.value = []
+    afiliadoCargado.value = 0
+    if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
+      form.value['cuotaMax'] = form.value['importeTotal']
     }
-    if (form.value[key] < 0) {
-      alert('No se admiten valores negativos')
-      loading.value = false;
-      return
+    if (form.value['cuotaMin'] == null || form.value['cuotaMin'] == 0) {
+      form.value['cuotaMin'] = 0
     }
-    if (key == 'cantidadAfiliados' || key == 'importeTotal') {
-      if (form.value[key] % 1 != 0) {
-        alert('No se admiten valores decimales')
+    for (let key in form.value) {
+      if (form.value[key] == null || form.value[key] == undefined) {
+        alert('Complete todos los campos')
         loading.value = false;
         return
       }
-      if (form.value[key] == 0) {
-        alert('No se admiten valores nulos')
+      if (form.value[key] < 0) {
+        alert('No se admiten valores negativos')
+        loading.value = false;
+        return
+      }
+      if (key == 'cantidadAfiliados' || key == 'importeTotal') {
+        if (form.value[key] % 1 != 0) {
+          alert('No se admiten valores decimales')
+          loading.value = false;
+          return
+        }
+        if (form.value[key] == 0) {
+          alert('No se admiten valores nulos')
+          loading.value = false;
+          return
+        }
+      }
+      if (form.value[key] > 1000000000) {
+        alert('No se admiten valores tan grandes')
         loading.value = false;
         return
       }
     }
-    if (form.value[key] > 1000000000) {
-      alert('No se admiten valores tan grandes')
+    if (form.value['cuotaMax'] < form.value['cuotaMin']) {
+      alert('La cuota maxima no puede ser menor a la cuota minima')
       loading.value = false;
       return
     }
-  }
-  if (form.value['cuotaMax'] < form.value['cuotaMin']) {
-    alert('La cuota maxima no puede ser menor a la cuota minima')
+
+    await handleRandomsMinMaxPromise()
+
+    loading.value = false;
+
+  } catch (error) {
+    alert('Error al crear la tabla')
     loading.value = false;
     return
   }
-  
-  await handleRandomsMinMaxPromise()
-  
-  loading.value = false;
-
-} catch (error) {
-  alert('Error al crear la tabla')
-  loading.value = false;
-    return
-}
 
 }
 const handleRandomsMinMax = () => {
@@ -137,43 +140,43 @@ const handleRandomsMinMax = () => {
   tabla.value = []
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
-    afiliadoCargado.value=afiliado+1
+    afiliadoCargado.value = afiliado + 1
     if (sum + random <= total) {
       sum += random
-      if (random == 0) {
-        tabla.value[afiliado - 1].cuota = tabla.value[afiliado - 1].cuota / 2
-        sum -= tabla.value[afiliado - 1].cuota
-        tabla.value.push({
-          afiliado: afiliado + 1,
-          cuota: tabla.value[afiliado - 1].cuota
-        })
-      } else {
-        tabla.value.push({
-          afiliado: afiliado + 1,
-          cuota: Math.round(random * 100) / 100
-        })
-      }
+      tabla.value.push({
+        afiliado: afiliado + 1,
+        cuota: Math.round(random * 100) / 100
+      })
       afiliado++
     }
   }
   if (sum < total) {
     console.log(sum, "sum")
-    tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + (total - sum)) * 100) / 100 
+    let acum = total - sum
+    if(acum < 10){
+      tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + (total - sum)) * 100) / 100
+    }else{
+     acum = acum / form.value['cantidadAfiliados']
+    tabla.value.map((item) => {
+      item.cuota = Math.round((item.cuota + acum ) * 100) / 100
+    })
+    }
+
     sum = total
   }
   totalSum.value = sum
 }
 
-const refreshTable = (e)=>{
+const refreshTable = (e) => {
   e.preventDefault()
   tabla.value = []
   form.value = {
-     cantidadAfiliados:null,
-     cuotaMax:null,
-     cuotaMin:null,
-     importeTotal:null
-   }
-   afiliadoCargado.value = 0
+    cantidadAfiliados: null,
+    cuotaMax: null,
+    cuotaMin: null,
+    importeTotal: null
+  }
+  afiliadoCargado.value = 0
 }
 
 const arrayToCsv = () => {
@@ -186,7 +189,7 @@ const arrayToCsv = () => {
   array.forEach(function (rowArray) {
     let row = rowArray.join(";");
     csvContent += row + "\r\n";
-  }); 
+  });
   var encodedUri = encodeURI(csvContent);
   var link = document.createElement("a");
   link.setAttribute("href", encodedUri);
@@ -196,12 +199,12 @@ const arrayToCsv = () => {
   window.open(encodedUri);
 }
 
-const handleRandomsMinMaxPromise =()=>{
-  return new Promise ((resolve,reject)=>{
-    setTimeout(()=>{
+const handleRandomsMinMaxPromise = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
       handleRandomsMinMax()
       resolve('ok')
-    },10)
+    }, 10)
   })
 }
 
