@@ -19,7 +19,7 @@
     <button :disable="loading" class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
   <div v-if="loading == true"  class="">Cargando afiliados.....
-  <div><div>
+    <div class="lds-dual-ring"></div>
   </div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
