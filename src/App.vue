@@ -18,7 +18,7 @@
     <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
     <button class="col-start-3 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
-  <div v-if="tabla.length <1 && loading" class="lds-dual-ring"></div>
+  <div class="lds-dual-ring">{{afiliadoCargado!==0?´Afilidado cargado:${afiliadoCargado}´:ˋˋ}}</div>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
       <div class="table-row">
@@ -56,6 +56,7 @@
 <script setup>
 import { ref } from 'vue'
 const totalSum = ref(0)
+const afiliadoCargado=ref(0)
 const loading = ref(false)
 const form = ref({
   cantidadAfiliados: null,
@@ -134,6 +135,7 @@ const handleRandomsMinMax = () => {
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
     random = Math.round(random * 100) / 100
+    afiliadoCargado.value=afiliado+1
     if (sum + random <= total) {
       sum += random
       if (random == 0) {
