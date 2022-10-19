@@ -170,6 +170,7 @@ const handleRandomsMinMax = () => {
 }
 
 const  refreshTable = (e)=>{
+  e.preventDefault()
   table.value = []
   form.value['cantidadAfiliados'] = null
   form.value['cuotaMax']=null
