@@ -15,7 +15,8 @@
       <label class="" for="importeTotal">Importe Total:</label>
       <input class="w-full " type="number" id="importeTotal" v-model="form['importeTotal']">
     </div>
-    <button class=" col-start-2 row-start-3" @click="loadTable($event)">Aceptar</button>
+    <button class=" col-start-1 row-start-3" @click="loadTable($event)">Aceptar</button>
+    <button class="col-start-2 row-start-3" @click="refreshTable($event)">Refresh</button>
   </form>
   <div v-if="tabla.length > 0 && !loading "  class="table mx-auto w-2/3 flex items-center border-solid border-2 border-neutral-50">
     <div class="table-header-group">
@@ -27,7 +28,6 @@
           <span>Cuota</span>
         </div>
       </div>
-
     </div>
       <div class="table-row-group">
         <div class="table-row my-2" v-for="item in tabla">
@@ -124,7 +124,6 @@ try {
 
 }
 const handleRandomsMinMax = () => {
-  /*Create a random number within a range, without the sum of the generated values ​​exceeding the total */
   let total = form.value['importeTotal']
   let sum = 0
   let afiliado = 0
@@ -133,6 +132,9 @@ const handleRandomsMinMax = () => {
   tabla.value = []
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
+    if(random > max){
+      random -= random - max
+    }
     random = Math.round(random * 100) / 100
     if (sum + random <= total) {
       sum += random
@@ -167,6 +169,13 @@ const handleRandomsMinMax = () => {
   totalSum.value = sum
 }
 
+const  refreshTable = (e)=>{
+  table.value = []
+  form.value['cantidadAfiliados'] = null
+  form.value['cuotaMax']=null
+  form.value['cuotaMin']=null
+  form.value['importeTotal'] = null
+}
 
 const arrayToCsv = () => {
   let csvContent = "data:text/csv;charset=utf-8,";
