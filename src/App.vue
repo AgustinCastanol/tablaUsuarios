@@ -38,9 +38,16 @@
             <span>${{item.cuota}}</span>
           </div>
         </div>
+        <div class="table-row my-2">
+          <div class="table-cell border-solid border-t border-r border-neutrak-59 text-left">
+            <span>Total</span>
+          </div>
+          <div class="table-cell border-solid border-t border-r border-neutral-50 text-left">
+            <span>{{totalSum}}</span>
+          </div>
+        </div>
       </div>
   </div>
-  <!-- add a float download button with tailwind -->
   <button v-if="tabla.length > 0" class="float-download" @click="arrayToCsv()">
     <div v-if="loading" class="lds-dual-ring"></div>
     Descargar
@@ -62,7 +69,6 @@ const loadTable = async (e) => {
 try {
   e.preventDefault()
   loading.value = true;
-  alert('Cargando...')
   if (form.value['cuotaMax'] == null || form.value['cuotaMax'] == 0) {
     form.value['cuotaMax'] = form.value['importeTotal']
   }
@@ -103,10 +109,11 @@ try {
     loading.value = false;
     return
   }
-
- setTimeout(() => {
-  handleRandomsMinMax()
- },1000);
+  alert('Cargando...')
+  
+  setTimeout(() => {
+    handleRandomsMinMax()
+  },10);
   loading.value = false;
 
 } catch (error) {
