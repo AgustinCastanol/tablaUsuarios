@@ -141,8 +141,15 @@ const handleRandomsMinMax = () => {
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
     afiliadoCargado.value = afiliado + 1
-    afiliado++
-  }
+    sum += random
+
+    if (sum + random <= total) {
+      tabla.value.push({
+        afiliado: afiliado + 1,
+        cuota: Math.round(random * 100) / 100
+      })
+      afiliado++
+    }
   if (sum < total) {
     console.log(sum, "sum")
     let acum = total - sum
