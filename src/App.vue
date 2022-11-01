@@ -141,29 +141,31 @@ const handleRandomsMinMax = () => {
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
     afiliadoCargado.value = afiliado + 1
-    
-    if (sum + random <= total) {
-      sum += random
-      tabla.value.push({
+    sum +=Math.round(random * 100) / 100
+    tabla.value.push({
         afiliado: afiliado + 1,
         cuota: Math.round(random * 100) / 100
       })
       afiliado++
-    }
   }
-  if (sum < total) {
-    console.log(sum, "sum")
-    let acum = total - sum
-    if(acum < 100){
-      tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + (total - sum)) * 100) / 100
-    }else{
-    acum = acum / form.value['cantidadAfiliados']
-    //tabla.value.map((item) => {item.cuota = Math.round((item.cuota + acum ) * 100) / 100})}
-    sum = total
+  console.log(sum )
+  console.log(total)
+  if(sum >total){
+    let acum = sum - total
+    let aux = acum / form.value['cantidadAfiliados']
+    let next = 0;
+    tabla.value.map((e)=>{
+      if(e.cuota < aux + next){
+        next = aux
+      }else{
+        e.cuota -= (aux + next)
+      }
+
+    })  
+    sum -=acum 
+
   }
   totalSum.value = sum
-
-}
 }
 const refreshTable = (e) => {
   e.preventDefault()
