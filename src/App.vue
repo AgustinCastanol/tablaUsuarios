@@ -165,7 +165,7 @@ const handleRandomsMinMax = () => {
   }
   totalSum.value = sum
 }
-
+}
 const refreshTable = (e) => {
   e.preventDefault()
   tabla.value = []
