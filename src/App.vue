@@ -153,7 +153,7 @@ const handleRandomsMinMax = () => {
   if (sum < total) {
     console.log(sum, "sum")
     let acum = total - sum
-    if(acum < 10){
+    if(acum < 1000){
       tabla.value[tabla.value.length - 1].cuota = Math.round((tabla.value[tabla.value.length - 1].cuota + (total - sum)) * 100) / 100
     }else{
      acum = acum / form.value['cantidadAfiliados']
