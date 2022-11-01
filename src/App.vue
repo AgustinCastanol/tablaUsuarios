@@ -149,6 +149,8 @@ const handleRandomsMinMax = () => {
         cuota: Math.round(random * 100) / 100
       })
       afiliado++
+    }else{
+      afiliado++
     }
   if (sum < total) {
     console.log(sum, "sum")
