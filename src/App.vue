@@ -66,10 +66,10 @@ const totalSum = ref(0)
 const afiliadoCargado = ref(0)
 const loading = ref(false)
 const form = ref({
-  cantidadAfiliados: 350,
-  importeTotal: 400000,
-  cuotaMax: 8000,
-  cuotaMin: 2500,
+  cantidadAfiliados: null,
+  importeTotal: null,
+  cuotaMax: null,
+  cuotaMin: null,
 })
 
 const tabla = ref([])
@@ -160,8 +160,12 @@ const handleRandomsMinMax = () => {
         next = 0;
       }
       else{
-        next = Math.round(((part - item.cuota)) * 100) / 100
-        item.cuota =  0
+        item.cuota -=  part
+        if(item.cuota <0){
+          let random = Math.random() * (1000 + 1)
+          next = (-1*(item.cuota-random))
+          item.cuota = random
+        }
       }
       control += item.cuota 
     })
