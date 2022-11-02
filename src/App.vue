@@ -66,10 +66,10 @@ const totalSum = ref(0)
 const afiliadoCargado = ref(0)
 const loading = ref(false)
 const form = ref({
-  cantidadAfiliados: null,
-  importeTotal: null,
-  cuotaMax: null,
-  cuotaMin: null,
+  cantidadAfiliados: 350,
+  importeTotal: 400000,
+  cuotaMax: 8000,
+  cuotaMin: 2500,
 })
 
 const tabla = ref([])
@@ -141,32 +141,42 @@ const handleRandomsMinMax = () => {
   while (afiliado < form.value['cantidadAfiliados']) {
     let random = Math.random() * (max - min + 1) + min
     afiliadoCargado.value = afiliado + 1
-    sum +=Math.round(random * 100) / 100
-    tabla.value.push({
+      sum += random
+      tabla.value.push({
         afiliado: afiliado + 1,
         cuota: Math.round(random * 100) / 100
       })
       afiliado++
   }
-  console.log(sum )
-  console.log(total)
-  if(sum >total){
-    let acum = sum - total
-    let aux = acum / form.value['cantidadAfiliados']
-    let next = 0;
-    tabla.value.map((e)=>{
-      if(e.cuota < aux + next){
-        next = aux
-      }else{
-        e.cuota -= (aux + next)
+
+  if(sum > total){
+    let control = 0
+    let next = 0
+    let diff = (sum - total)
+    let part = Math.round((diff/ (form.value['cantidadAfiliados']))*100)/100
+    tabla.value.map((item)=>{
+      if(item.cuota > part+next){
+        item.cuota = Math.round((item.cuota-(part + next)) * 100) / 100
+        next = 0;
       }
-
-    })  
-    sum -=acum 
-
+      else{
+        next = Math.round(((part - item.cuota)) * 100) / 100
+        item.cuota =  0
+      }
+      control += item.cuota 
+    })
+    console.log(control,"control")
   }
-  totalSum.value = sum
+  if(sum < total){
+    let diff = (total - sum)/form.value['cantidadAfiliados']
+    tabla.value.map((item)=>{
+      item.cuota = Math.round((item.cuota +diff) * 100) / 100
+    })
+  }
+ totalSum.value =total
+
 }
+
 const refreshTable = (e) => {
   e.preventDefault()
   tabla.value = []
