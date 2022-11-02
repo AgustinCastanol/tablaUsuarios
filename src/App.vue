@@ -175,7 +175,7 @@ const handleRandomsMinMax = () => {
     diff = (control - total)
     console.log(control,"soy el paso")
     console.log(diff,"soy la diferencia")
-    }while (control >= total)
+    }while (control >= total && diff > 1)
     console.log(control,"control")
   }
 
