@@ -134,6 +134,7 @@ const loadTable = async (e) => {
 const handleRandomsMinMax = () => {
   let total = form.value['importeTotal']
   let sum = 0
+  let control = 0
   let afiliado = 0
   let max = form.value['cuotaMax']
   let min = form.value['cuotaMin']
@@ -150,10 +151,12 @@ const handleRandomsMinMax = () => {
   }
 
   if(sum > total){
-    let control = 0
-    let next = 0
     let diff = (sum - total)
+     do{
+    let next = 0
+    let res = 0
     let part = Math.round((diff/ (form.value['cantidadAfiliados']))*100)/100
+    control=0
     tabla.value.map((item)=>{
       if(item.cuota > part+next){
         item.cuota = Math.round((item.cuota-(part + next)) * 100) / 100
@@ -164,13 +167,18 @@ const handleRandomsMinMax = () => {
         if(item.cuota <0){
           let random = Math.random() * (1000 + 1)
           next = (-1*(item.cuota-random))
-          item.cuota = random
+          item.cuota = Math.round(random * 100) / 100
         }
       }
       control += item.cuota 
     })
+    diff = (control - total)
+    console.log(control,"soy el paso")
+    console.log(diff,"soy la diferencia")
+    }while (control >= total)
     console.log(control,"control")
   }
+
   if(sum < total){
     let diff = (total - sum)/form.value['cantidadAfiliados']
     tabla.value.map((item)=>{
